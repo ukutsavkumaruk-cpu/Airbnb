@@ -1,0 +1,61 @@
+<%- include('../partials/head') %>
+<body>
+  <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+  <div class="bg-white text-center p-10 rounded-2xl shadow-lg max-w-md">
+
+    <h1 class="text-6xl font-extrabold text-pink-500">
+      My Favourites
+    </h1>
+     <%favHomeDetail.forEach(home => { %>
+  <div class="w-full  max-w-sm bg-white rounded-xl shadow-md overflow-hidden mb-3 block mr-4 ml-4">
+
+  <!-- Home Image -->
+  <img
+    src="<%= home.Img %>"
+    alt="Home"
+    class="w-full h-48 object-cover"
+  >
+
+  <div class="p-5">
+
+    <!-- Home Name -->
+    <h2 class="text-xl font-bold text-gray-800">
+      <%= home.Name %>
+    </h2>
+
+    <!-- Location -->
+    <p class="text-gray-500 mt-2">
+      📍 <%= home.Location %>
+    </p>
+
+    <!-- Price -->
+    <p class="text-lg font-semibold text-pink-600 mt-3">
+      ₹<%= home.Price %>
+      <span class="text-sm text-gray-500 font-normal">/ night</span>
+    </p>
+
+    <!-- Contact -->
+    <div class="mt-4 pt-4 border-t border-gray-200">
+      <p class="text-sm text-gray-600">
+        📧 <%= home.Email %>
+      </p>
+
+      <p class="text-sm text-gray-600 mt-1">
+        📞 <%= home.Phone %>
+      </p>
+    </div>
+    <button class="bg-green-300 p-1 rounded-xl">Book</button>
+    <a href="/store/home-detail/<%= home.id %>" class="bg-blue-300 p-1 rounded-xl">Details</a>
+
+    <form action="/store/favourite-list/delete" method="POST">
+      <input type="hidden" name="id" value="<%=home.id%>">
+      <button type="submit" class="bg-red-400 p-1 rounded-xl">Delete</button>
+    </form>
+
+  </div>
+</div><% }) %>
+   
+  </div>
+</div>
+</body>
+</html>

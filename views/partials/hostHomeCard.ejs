@@ -1,0 +1,50 @@
+ <% addedHomes.forEach(home => { %>
+  <div class="w-full max-w-sm bg-white rounded-xl shadow-md overflow-hidden mb-3 block mr-4 ml-4">
+
+  <!-- Home Image -->
+  <img
+    src="<%= home.Img %>"
+    alt="Home"
+    class="w-full h-48 object-cover"
+  >
+
+  <div class="p-5">
+
+    <!-- Home Name -->
+    <h2 class="text-xl font-bold text-gray-800">
+      <%= home.Name %>
+    </h2>
+
+    <!-- Location -->
+    <p class="text-gray-500 mt-2">
+      📍 <%= home.Location %>
+    </p>
+
+    <!-- Price -->
+    <p class="text-lg font-semibold text-pink-600 mt-3">
+      ₹<%= home.Price %>
+      <span class="text-sm text-gray-500 font-normal">/ night</span>
+    </p>
+
+    <!-- Contact -->
+    <div class="mt-4 pt-4 border-t border-gray-200">
+      <p class="text-sm text-gray-600">
+        📧 <%= home.Email %>
+      </p>
+
+      <p class="text-sm text-gray-600 mt-1">
+        📞 <%= home.Phone %>
+      </p>
+    </div>
+    <div class="flex justify-between mt-3">
+  <a  href="/host/edit-Home/<%= home.id %>?editing=true"  class="bg-green-300">
+    Edit
+  </a>
+
+  <a href="/host/host-home-list/<%= home.id %>"  class="bg-red-400">
+    Delete
+  </a>
+</div>
+
+  </div>
+</div><% }) %>

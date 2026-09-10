@@ -1,0 +1,25 @@
+<%- include('../partials/head') %>
+  <br><div class="min-h-screen bg-gray-100 px-6 py-10">
+
+  <div class="max-w-4xl mx-auto">
+
+    <!-- Add Home Button -->
+
+    <!-- Heading -->
+    <h2 class="text-2xl font-bold text-gray-800 mt-10 mb-5">
+      Host's Added Homes
+    </h2>
+
+    <!-- Homes List -->
+     <div class="max-h-fit max-w-full flex justify-evenly flex-wrap gap-4">
+      <%- include('../partials/hostHomeCard', { addedHomes: addedHomes }) %>
+      <div>
+        
+      </div>
+     </div>
+  </div>
+
+</div>
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<%- include('../partials/head') %>
+
+  <body>
+
+    <div class="min-h-screen flex items-center justify-center bg-gray-100 py-10">
+
+      <div class="bg-white w-full max-w-md p-8 rounded-xl shadow-md">
+
+        <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+          <%= editing ? "Edit your home" : " Add Your Home" %>
+
+        </h1>
+
+        <form action="/host/<%= editing? 'edit-Home/'+home.id : 'add-Home' %>" method="POST" class="space-y-5">
+
+          <!-- Home Name -->
+          <div>
+            <label for="home" class="block text-sm font-medium text-gray-700 mb-2">
+              Home Name
+            </label>
+
+            <input id="home" type="text" placeholder="Enter Home Name" value="<%= editing ? home.Name : '' %>" name="home" required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400">
+          </div>
+
+
+          <!-- Image URL -->
+          <div>
+            <label for="image" class="block text-sm font-medium text-gray-700 mb-2">
+              Home Image URL
+            </label>
+
+            <input id="image" type="url" value="<%= editing ? home.Img : '' %>" placeholder="https://example.com/home.jpg" name="image" required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400">
+          </div>
+
+
+          <!-- Location -->
+          <div>
+            <label for="location" class="block text-sm font-medium text-gray-700 mb-2">
+              Location
+            </label>
+
+            <input id="location" type="text" value="<%= editing ? home.Location : '' %>"
+            placeholder="Enter Home Location" name="location" required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400">
+          </div>
+
+
+          <!-- Price -->
+          <div>
+            <label for="price" class="block text-sm font-medium text-gray-700 mb-2">
+              Price per Night
+            </label>
+
+            <input id="price" type="number" 
+            value="<%= editing ? home.Price : '' %>"
+            placeholder="Enter Price" name="price" min="0" required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400">
+          </div>
+
+
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+              Email
+            </label>
+
+            <input id="email" type="email" value="<%= editing ? home.Email : '' %>"
+             placeholder="Enter Email" name="email" required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400">
+          </div>
+
+
+          <!-- Phone -->
+          <div>
+            <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+              Phone Number
+            </label>
+
+            <input id="phone" type="tel" value="<%= editing ? home.Phone : '' %>" placeholder="Enter Phone Number" name="phone" required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400">
+          </div>
+
+
+          <!-- Submit Button -->
+          <button type="submit"
+            class="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2.5 rounded-lg transition">
+            <%= editing? 'Save Edit' : 'Add Home' %>
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </body>
+
+  </html>
