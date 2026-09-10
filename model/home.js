@@ -1,6 +1,9 @@
 const path = require('path');
 const fs = require('fs')
 const rootDir = require('../util/path')
+const { favClass } = require("../model/favourites");
+const favouriteFilePath = path.join(rootDir,'model','data','fav.json')
+
 
 let addedHomes = [];
 
@@ -46,6 +49,12 @@ class homeClass{
         console.log("Error aaya hai:",err);
       }
       else{
+        favClass.deleteFav(id,(favHomes)=>{
+        
+                      fs.writeFile(favouriteFilePath, JSON.stringify(favHomes),(err)=>{
+                       if(err) console.log('Error in deletion of favId: ',err)        
+                      })
+                     })
         return callback(addedHomes);
       }
       }) 
