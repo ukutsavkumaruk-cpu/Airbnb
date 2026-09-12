@@ -16,7 +16,8 @@
     "@tailwindcss/cli": "^4.3.3",
     "body-parser": "^2.3.0",
     "ejs": "^6.0.1",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mysql2": "^3.24.4"
   },
   "devDependencies": {
     "concurrently": "^10.0.5",

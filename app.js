@@ -5,6 +5,14 @@ const {hostRouter} = require('./routes/hostRouter');
 const path = require('path')
 const rootDir = require('./util/path');
 const { pageNotFound } = require('./controllers/errors');
+const db = require('./util/databaseSQL')
+db.execute('SELECT * FROM homes')
+.then(result => {
+  console.log('Getting from DB : ', result)
+})
+.catch(err =>{
+  console.log("Error while fetching DB :",err)
+})
 
 const app = express()
 const server = http.createServer(app);
