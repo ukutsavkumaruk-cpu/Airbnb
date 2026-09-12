@@ -7,27 +7,37 @@ const rootDir = require('../util/path')
 const favouriteFilePath = path.join(rootDir,'model','data','fav.json')
 
 exports.getHome = (req,res,next) =>{
-   homeClass.fetchData(addedHomes =>{res.render('store/home-list',{addedHomes:addedHomes,pageTitle:'home'})});
-  }
+
+   homeClass.fetchData().then(([addedHomes])=>{
+      console.log(addedHomes)
+      res.render('store/home-list',{addedHomes:addedHomes,
+         pageTitle:'home'}
+      )})
+   .catch(err =>{
+  console.log("Error while fetching DB :",err)
+})
+   }
 
 exports.getBookings = (req,res,next) =>{
-   homeClass.fetchData(addedHomes =>{res.render('store/bookings',{addedHomes:addedHomes,pageTitle:'bookings'})});
+  homeClass.fetchData().then(([addedHomes])=>{res.render('store/bookings',{addedHomes:addedHomes,pageTitle:'bookings'})});
   }
 
 exports.getFavourites = (req,res,next) =>{
    favClass.getFavourites( favs =>{
-   homeClass.fetchData(addedHomes =>{
+   homeClass.fetchData().then(([addedHomes])=>{
       const favHomeDetail = addedHomes.filter((home)=>favs.includes(home.id))
       res.render('store/favourite-list',{favHomeDetail:favHomeDetail,pageTitle:'favourites'})})})
   }
 
 exports.getHomeDetail = (req,res,next) =>{
    const homeID = req.params.homeID;
-   const home = homeClass.findByID(homeID,(home) =>{
+   homeClass.findByID(homeID)
+   .then(([home]) =>{
       if(!home){res.redirect('/')
    console.log('home not found')}
       else{
-         res.render('store/home-detail',{pageTitle:'home-detail',home:home})
+         console.log(home[0])
+         res.render('store/home-detail',{pageTitle:'home-detail',home:home[0]})
       }
       
    })

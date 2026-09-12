@@ -1,86 +1,47 @@
-const path = require('path');
-const fs = require('fs')
-const rootDir = require('../util/path')
+const path = require("path");
+const fs = require("fs");
+const rootDir = require("../util/path");
 const { favClass } = require("../model/favourites");
-const favouriteFilePath = path.join(rootDir,'model','data','fav.json')
+const favouriteFilePath = path.join(rootDir, "model", "data", "fav.json");
 
+const db = require("../util/databaseSQL");
 
 let addedHomes = [];
 
-class homeClass{
-
-  constructor(Name,Email,Location,Image,Price,Phone){
+class homeClass {
+  constructor(Name, Email, Location, Image, Price, Phone,Id) {
     this.Name = Name;
     this.Email = Email;
     this.Location = Location;
     this.Img = Image;
     this.Price = Price;
     this.Phone = Phone;
+    this.id = Id;
   }
 
-  save(){
-    homeClass.fetchData(addedHomes =>{
-      if(this.id){
-        addedHomes = addedHomes.map(home =>{
-          if(home.id == this.id){
-            return this;
-          }
-          return home;
-        })
+  save() {
+    if(this.id){
+      return db.execute('UPDATE homes SET Name=?, Price=?,Location=?,Img=?,Phone=?,Email=? WHERE id=?',[this.Name,this.Price,this.Location,this.Img,this.Phone,this.Email,this.id])
     }
     else{
-      this.id = Math.random().toString();
-      addedHomes.push(this)
+      this.id = Math.floor(Math.random()*10000)
+      return db.execute('INSERT INTO homes(Name,Price,Location,Img,Phone,Email,id) VALUE (?,?,?,?,?,?,?) ',[this.Name,this.Price,this.Location,this.Img,this.Phone,this.Email,this.id])
     }
-    const homeFilePath = path.join(rootDir,'model','data','data.json')
-    fs.writeFile(homeFilePath, JSON.stringify(addedHomes), (err)=>{
-      console.log("Error aaya hai:",err)
-    })
-    }) 
+    
   }
-  static deleteData(id,callback){
-    this.fetchData(addedHomes=>{
-    addedHomes = addedHomes.filter(home =>{
-       return home.id != id;
-    })
-    const homeFilePath = path.join(rootDir,'model','data','data.json')
-    fs.writeFile(homeFilePath, JSON.stringify(addedHomes), (err)=>{
-      if(err){
-        console.log("Error aaya hai:",err);
-      }
-      else{
-        favClass.deleteFav(id,(favHomes)=>{
-        
-                      fs.writeFile(favouriteFilePath, JSON.stringify(favHomes),(err)=>{
-                       if(err) console.log('Error in deletion of favId: ',err)        
-                      })
-                     })
-        return callback(addedHomes);
-      }
-      }) 
-      
-  })
+  static deleteData(id) {
+   return db.execute('DELETE FROM homes WHERE id =?',[id]);
   }
 
-  static fetchData(callback){
-    const ReadFilePath = path.join(rootDir,'model','data','data.json')
-    fs.readFile(ReadFilePath,(err,data)=>{
-      if(!err){
-       return callback(addedHomes = JSON.parse(data))
-      }
-      else{
-       return callback([]);
-      }
-    })
+  static fetchData() {
+    return db.execute('SELECT * FROM homes')
   }
 
-   static findByID(id,callback){
-    this.fetchData((homes) =>{
-      const homeFound = homes.find((home) =>home.id === id)
-      callback(homeFound)
-    })
+  static findByID(id) {
+      return db.execute('SELECT * FROM homes WHERE id =?',[id]);
   }
 }
-module.exports ={
-  homeClass,addedHomes
-}
+module.exports = {
+  homeClass,
+  addedHomes,
+};

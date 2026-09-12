@@ -8,27 +8,37 @@ exports.getAddHome = (req, res, next) => {
 exports.getEditHome = (req, res, next) => {
   const homeId = req.params.homeId;
   const editing = req.query.editing === 'true';
-  homeClass.findByID(homeId, (home) => {
+  homeClass.findByID(homeId).then(([home]) => {
     if (!home) {
       console.log("Home not found for editing")
       res.redirect('/host/host-home-list')
     }
     else {
       console.log(homeId, editing)
-      res.render('host/edit-Home', { pageTitle: 'hostHomes', editing: editing , home:home})
+      res.render('host/edit-Home', { pageTitle: 'hostHomes', editing: editing , home:home[0]})
     }
   })
 }
 
 
-
-
 exports.getDeleted = (req,res,next) =>{
   const homeId = req.params.homeId;
-  homeClass.deleteData(homeId,(homes =>{
-    res.render('host/host-home-list',{pageTitle:'host-home',addedHomes:homes})
-  }))
-}
+  homeClass.deleteData(homeId)
+  .then(()=>{
+     homeClass.fetchData()
+    .then(([homes])=>{
+      res.render('host/host-home-list',{addedHomes:homes,pageTitle:'host-home'})
+    })
+    .catch((err)=>{
+      console.log("Error occurs after deletion: ",err)
+    })
+    
+  })
+  .catch((err)=>{
+    console.log(err)
+  })
+  }
+
 
 
 
@@ -50,5 +60,5 @@ exports.postAddHome = (req, res, next) => {
 }
 
 exports.getHostHomeList = (req, res, next) => {
-  homeClass.fetchData(addedHomes => { res.render('host/host-home-list', { addedHomes: addedHomes, pageTitle: 'host-home-list' }) });
+  homeClass.fetchData().then(([addedHomes])=>{ res.render('host/host-home-list', { addedHomes: addedHomes, pageTitle: 'host-home-list' }) });
 }
