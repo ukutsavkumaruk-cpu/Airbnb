@@ -45,10 +45,10 @@
       </p>
     </div>
     <button class="bg-green-300 p-1 rounded-xl">Book</button>
-    <a href="/store/home-detail/<%= home.id %>" class="bg-blue-300 p-1 rounded-xl">Details</a>
+    <a href="/store/home-detail/<%= home._id %>" class="bg-blue-300 p-1 rounded-xl">Details</a>
 
     <form action="/store/favourite-list/delete" method="POST">
-      <input type="hidden" name="id" value="<%=home.id%>">
+      <input type="hidden" name="id" value="<%=home._id%>">
       <button type="submit" class="bg-red-400 p-1 rounded-xl">Delete</button>
     </form>
 

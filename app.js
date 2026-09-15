@@ -5,7 +5,8 @@ const {hostRouter} = require('./routes/hostRouter');
 const path = require('path')
 const rootDir = require('./util/path');
 const { pageNotFound } = require('./controllers/errors');
-const db = require('./util/databaseSQL')
+const db = require('./util/databaseSQL');
+const {mongoConnect} = require('./util/databaseSQL');
 
 
 
@@ -27,6 +28,9 @@ app.use(pageNotFound)
 
 
 const PORT = 3000;
- server.listen(PORT,()=>{
+mongoConnect(client =>{
+console.log("Connection Successful",client);
+server.listen(PORT,()=>{
   console.log(`Server is running at http://localhost:${PORT}`)
  })
+})

@@ -8,14 +8,14 @@ exports.getAddHome = (req, res, next) => {
 exports.getEditHome = (req, res, next) => {
   const homeId = req.params.homeId;
   const editing = req.query.editing === 'true';
-  homeClass.findByID(homeId).then(([home]) => {
+  homeClass.findByID(homeId).then((home) => {
     if (!home) {
       console.log("Home not found for editing")
       res.redirect('/host/host-home-list')
     }
     else {
       console.log(homeId, editing)
-      res.render('host/edit-Home', { pageTitle: 'hostHomes', editing: editing , home:home[0]})
+      res.render('host/edit-Home', { pageTitle: 'hostHomes', editing: editing , home:home})
     }
   })
 }
@@ -26,7 +26,7 @@ exports.getDeleted = (req,res,next) =>{
   homeClass.deleteData(homeId)
   .then(()=>{
      homeClass.fetchData()
-    .then(([homes])=>{
+    .then((homes)=>{
       res.render('host/host-home-list',{addedHomes:homes,pageTitle:'host-home'})
     })
     .catch((err)=>{
@@ -45,8 +45,8 @@ exports.getDeleted = (req,res,next) =>{
 
 exports.postEditHome = (req, res, next) => {
   const homeId = req.params.homeId;
-  const { home, email, location, image, price, phone } = req.body;
-  const newHome = new homeClass(home, email, location, image, price, phone)
+  const {home,email, location, image, price, phone } = req.body;
+  const newHome = new homeClass(home,email,location,image, price, phone)
   newHome.id = homeId;
   newHome.save()
   res.render('host/home-add-Success', { pageTitle: 'Success' })
@@ -60,5 +60,5 @@ exports.postAddHome = (req, res, next) => {
 }
 
 exports.getHostHomeList = (req, res, next) => {
-  homeClass.fetchData().then(([addedHomes])=>{ res.render('host/host-home-list', { addedHomes: addedHomes, pageTitle: 'host-home-list' }) });
+  homeClass.fetchData().then((addedHomes)=>{ res.render('host/host-home-list', { addedHomes: addedHomes, pageTitle: 'host-home-list' }) });
 }

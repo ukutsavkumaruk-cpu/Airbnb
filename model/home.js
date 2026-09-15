@@ -1,10 +1,8 @@
-const path = require("path");
-const fs = require("fs");
-const rootDir = require("../util/path");
+const { ObjectId } = require("mongodb");
 const { favClass } = require("../model/favourites");
-const favouriteFilePath = path.join(rootDir, "model", "data", "fav.json");
+const{getDB} = require('../util/databaseSQL')
 
-const db = require("../util/databaseSQL");
+
 
 let addedHomes = [];
 
@@ -16,29 +14,43 @@ class homeClass {
     this.Img = Image;
     this.Price = Price;
     this.Phone = Phone;
-    this.id = Id;
   }
 
   save() {
+    const db = getDB();
+
     if(this.id){
-      return db.execute('UPDATE homes SET Name=?, Price=?,Location=?,Img=?,Phone=?,Email=? WHERE id=?',[this.Name,this.Price,this.Location,this.Img,this.Phone,this.Email,this.id])
+      return db.collection('homes').updateOne({_id:new ObjectId(String(this.id))},{$set: this});
     }
     else{
-      this.id = Math.floor(Math.random()*10000)
-      return db.execute('INSERT INTO homes(Name,Price,Location,Img,Phone,Email,id) VALUE (?,?,?,?,?,?,?) ',[this.Name,this.Price,this.Location,this.Img,this.Phone,this.Email,this.id])
+      return db.collection('homes').insertOne(this)
+    .then((result)=>{
+      console.log("Home added successfully",result);
+    })
+    .catch((err)=>{
+      console.log("Error accurs while saving home",err);
+    })
     }
     
+
   }
+  
   static deleteData(id) {
-   return db.execute('DELETE FROM homes WHERE id =?',[id]);
+    const db = getDB();
+    return db.collection('homes').deleteOne({_id:new ObjectId(String(id))});
+
   }
 
   static fetchData() {
-    return db.execute('SELECT * FROM homes')
+    const db = getDB();
+    return db.collection('homes').find().toArray();
+
   }
 
   static findByID(id) {
-      return db.execute('SELECT * FROM homes WHERE id =?',[id]);
+    const db = getDB();
+    return db.collection('homes').find({_id:new ObjectId(String(id))}).next();
+
   }
 }
 module.exports = {
