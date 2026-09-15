@@ -1,40 +1,34 @@
-const path = require('path');
-const fs = require('fs')
-const rootDir = require('../util/path')
+const { getDB } = require('../util/databaseSQL');
+const { ObjectId } = require("mongodb");
 
-const fav = [];
-const favouriteFilePath = path.join(rootDir,'model','data','fav.json')
 
-class favClass{
 
-  static addFavourites(id,callback){
-    this.getFavourites((favourites) =>{
-      if(favourites.includes(id)){
-        console.log("Home already present");
-      }
-      else{
-        favourites.push(id)
-        fs.writeFile(favouriteFilePath, JSON.stringify(favourites),(err)=>{
-          callback(err)
-        })
-      }
+module.exports = class favClass{
+
+  constructor(houseId){
+    this.houseId = houseId;
+  }
+
+  addFavourites(){
+    const db = getDB()
+    return db.collection('favourites').insertOne(this)
+    .then((result)=>{
+      console.log("added to favourite successfully",result);
+    })
+    .catch((err)=>{
+      console.log("Error accurs while saving favourites",err);
     })
   }
   
-  static getFavourites(callback){
-    fs.readFile(favouriteFilePath,(err,data) =>{
-      return callback(!err ? JSON.parse(data) : [])
-    })
+  static getFavourites(){
+    const db = getDB();
+    return db.collection('favourites').find().toArray();
   }
 
-  static deleteFav(id,callback){
-    this.getFavourites(favHomes =>{
-       const favouriteHomes = favHomes.filter(favId => {return id!=favId})
-      callback(favouriteHomes)
-    })  
+  static deleteFav(id){
+    const db = getDB();
+        return db.collection('favourites').deleteOne({houseId:id});
+
   }
   
-}
-module.exports ={
-  favClass
 }

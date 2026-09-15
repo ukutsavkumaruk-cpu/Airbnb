@@ -1,4 +1,4 @@
-const { favClass } = require("../model/favourites");
+const favClass  = require("../model/favourites");
 const {homeClass} = require("../model/home");
 const path = require('path')
 const fs = require('fs')
@@ -23,9 +23,11 @@ exports.getBookings = (req,res,next) =>{
   }
 
 exports.getFavourites = (req,res,next) =>{
-   favClass.getFavourites( favs =>{
-   homeClass.fetchData().then((addedHomes)=>{
-      const favHomeDetail = addedHomes.filter((home)=>favs.includes(home._id))
+   favClass.getFavourites().then( favs =>{
+   favs = favs.map(favs => favs.houseId)
+   homeClass.fetchData()
+   .then((addedHomes)=>{
+      const favHomeDetail = addedHomes.filter((home)=>favs.includes(home._id.toString()))
       res.render('store/favourite-list',{favHomeDetail:favHomeDetail,pageTitle:'favourites'})})})
   }
 
@@ -43,26 +45,31 @@ exports.getHomeDetail = (req,res,next) =>{
   }
 exports.postAddToFavourite = (req,res,next) =>{
     const favId = req.body.id;
-    favClass.addFavourites(favId,(err)=>{
-      console.log('Error happens',err)
+    const newFav = new favClass(favId)
+    newFav.addFavourites()
+    .then((res)=>{
+      console.log("Your home added to favList.",res)
     })
-   res.redirect('/store/favourite-list')
+    .catch((err)=>{
+      console.log("Your home failed added to favList.",err)
+    })
+    .finally(res.redirect('/store/favourite-list'))
+   
   }
   
 exports.postDeleteFavourite = (req,res,next) =>{
-    const favId = req.body.id;
-    favClass.deleteFav(favId,(favHomes)=>{
-
-              fs.writeFile(favouriteFilePath, JSON.stringify(favHomes),(err)=>{
-               if(err) console.log('Error in deletion of favId: ',err)
-                  else{
-                res.redirect('/store/favourite-list')
-               }
-                
-              })
+   const favId = req.body.id;
+   console.log(favId)
+    favClass.deleteFav(favId)
+    .then(res=>{
+      console.log('Successfully deleted',res);
     })
-    
-  
+    .catch(err=>{
+      console.log("Error occurs while deleting",err)
+    })
+    .finally(() => {
+  res.redirect('/store/favourite-list');
+})
   }
   
    

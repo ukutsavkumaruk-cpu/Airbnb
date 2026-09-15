@@ -3,7 +3,6 @@ const { favClass } = require("../model/favourites");
 const{getDB} = require('../util/databaseSQL')
 
 
-
 let addedHomes = [];
 
 class homeClass {
