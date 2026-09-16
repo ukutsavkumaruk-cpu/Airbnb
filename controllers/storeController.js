@@ -45,16 +45,27 @@ exports.getHomeDetail = (req,res,next) =>{
   }
 exports.postAddToFavourite = (req,res,next) =>{
     const favId = req.body.id;
+    console.log("Ye wo favId hai jo url se aai hai: ",favId)
     const newFav = new favClass(favId)
-    newFav.addFavourites()
+    favClass.getFavourites().then(favs =>{
+      console.log("Yahi hai jo tum dhoondh rahe ho: ",favs)
+      favs = favs.map(unit => unit.houseId);
+      let idPass = favs.includes(favId)
+      if(!idPass){
+      newFav.addFavourites()
     .then((res)=>{
       console.log("Your home added to favList.",res)
     })
     .catch((err)=>{
       console.log("Your home failed added to favList.",err)
     })
-    .finally(res.redirect('/store/favourite-list'))
-   
+    .finally(()=>res.redirect('/store/favourite-list'))
+     }
+     else{
+      console.log("Favourite home already in favList.")
+      res.redirect('/store/favourite-list')
+     }
+     })
   }
   
 exports.postDeleteFavourite = (req,res,next) =>{
