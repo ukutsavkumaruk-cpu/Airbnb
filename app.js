@@ -5,8 +5,7 @@ const {hostRouter} = require('./routes/hostRouter');
 const path = require('path')
 const rootDir = require('./util/path');
 const { pageNotFound } = require('./controllers/errors');
-const db = require('./util/databaseSQL');
-const {mongoConnect} = require('./util/databaseSQL');
+const { default: mongoose } = require('mongoose');
 
 
 
@@ -28,9 +27,15 @@ app.use(pageNotFound)
 
 
 const PORT = 3000;
-mongoConnect(client =>{
-console.log("Connection Successful",client);
+const DB_URL = "mongodb+srv://ukutsavkumaruk_db_user:utsav1311@airbnbv1.3ajox3i.mongodb.net/airbnb"
+
+mongoose.connect(DB_URL).then(()=>{
+console.log("Connection Successful");
 server.listen(PORT,()=>{
   console.log(`Server is running at http://localhost:${PORT}`)
- })
+})
+}
+)
+.catch(err =>{
+  console.log("Error occurs while connection to database.",err)
 })

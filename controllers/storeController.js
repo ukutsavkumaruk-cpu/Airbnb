@@ -1,5 +1,5 @@
 const favClass  = require("../model/favourites");
-const {homeClass} = require("../model/home");
+const homeClass = require("../model/home");
 const path = require('path')
 const fs = require('fs')
 const rootDir = require('../util/path')
@@ -8,7 +8,7 @@ const favouriteFilePath = path.join(rootDir,'model','data','fav.json')
 
 exports.getHome = (req,res,next) =>{
 
-   homeClass.fetchData().then((addedHomes)=>{
+   homeClass.find().then((addedHomes)=>{
       console.log(addedHomes)
       res.render('store/home-list',{addedHomes:addedHomes,
          pageTitle:'home'}
@@ -19,13 +19,13 @@ exports.getHome = (req,res,next) =>{
    }
 
 exports.getBookings = (req,res,next) =>{
-  homeClass.fetchData().then((addedHomes)=>{res.render('store/bookings',{addedHomes:addedHomes,pageTitle:'bookings'})});
+  homeClass.find().then((addedHomes)=>{res.render('store/bookings',{addedHomes:addedHomes,pageTitle:'bookings'})});
   }
 
 exports.getFavourites = (req,res,next) =>{
    favClass.getFavourites().then( favs =>{
    favs = favs.map(favs => favs.houseId)
-   homeClass.fetchData()
+   homeClass.find()
    .then((addedHomes)=>{
       const favHomeDetail = addedHomes.filter((home)=>favs.includes(home._id.toString()))
       res.render('store/favourite-list',{favHomeDetail:favHomeDetail,pageTitle:'favourites'})})})
@@ -33,7 +33,7 @@ exports.getFavourites = (req,res,next) =>{
 
 exports.getHomeDetail = (req,res,next) =>{
    const homeID = req.params.homeID;
-   homeClass.findByID(homeID)
+   homeClass.findById(homeID)
    .then((home) =>{
       if(!home){res.redirect('/')
    console.log('home not found')}
@@ -48,7 +48,7 @@ exports.postAddToFavourite = (req,res,next) =>{
     console.log("Ye wo favId hai jo url se aai hai: ",favId)
     const newFav = new favClass(favId)
     favClass.getFavourites().then(favs =>{
-      console.log("Yahi hai jo tum dhoondh rahe ho: ",favs)
+      console.log("Yahi hai jo tum dhoondh rahe ho : ",favs)
       favs = favs.map(unit => unit.houseId);
       let idPass = favs.includes(favId)
       if(!idPass){
