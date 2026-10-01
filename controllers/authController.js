@@ -1,16 +1,44 @@
 const{check, validationResult} = require('express-validator')
+const User = require('../model/user')
+const bcrypt = require('bcrypt')
 
 exports.getLogin = (req, res, next) => {
-  res.render('authorization/login', { pageTitle: 'login', isLoggedIn:false})
+  res.render('authorization/login', { pageTitle: 'login', isLoggedIn:false,errors:[],oldInput:{userName:""}})
 }
 
-exports.postLogin = (req, res, next) => {
-   req.session.isLoggedIn = true;
+exports.postLogin = async (req, res, next) => {
+  const{email,password} = req.body;
+  const user = await User.findOne({userName:email})
+  if(!user){
+    return res.status(422).render('authorization/login',{
+          pageTitle:'login',
+          isLoggedIn:false,
+          errors: ["User does not exist"],
+          oldInput:{
+            email,
+          }
+        })
+  }
+  const isMatch = await bcrypt.compare(password,user.password)
+  if(!isMatch){
+    return res.status(422).render('authorization/login',{
+          pageTitle:'login',
+          isLoggedIn:false,
+          errors: ["Invalid password"],
+          oldInput:{
+            email,
+          }
+        })
+  }
+  req.session.isLoggedIn = true;
+  req.session.user = user;
+  await req.session.save()
   res.redirect('/')
+   
 }
 
 exports.postLogout = (req, res, next) => {
-   res.session.destroy((err)=>{
+   req.session.destroy((err)=>{
     if(err){
       console.log("Error occur while destroying session :",err)
     }
@@ -41,7 +69,7 @@ exports.postSignUp = [
 
      check('lastName')
     .trim()
-    .matches(/^[a-zA-Z\s]+s/)
+    .matches(/^[a-zA-Z\s]+$/)
     .withMessage('Last name can only contains letters'),
 
      check('userName')
@@ -104,7 +132,33 @@ exports.postSignUp = [
           }
         })
       }
-      res.redirect('/login')
+      bcrypt.hash(password,12)
+      .then(hashedPassword =>{
+        const user = new User({firstName,lastName,userName,password:hashedPassword,userType})
+      user.save()
+      .then(()=>{
+        console.log(req.body)
+        console.log("Password successfully hashed and stored")
+        res.redirect('/login')
+      })
+      .catch(err =>{
+        return res.status(422).render('authorization/signUp',{
+          pageTitle:'SignUp',
+          isLoggedIn:false,
+          errors:[err],
+          oldInput:{
+            firstName,
+            lastName,
+            userName,
+            password
+          }
+        })
+      })
+      })
+      .catch(err =>{
+        console.log("Error while hashing password",err)
+      })
+      
     }
 ]
 
