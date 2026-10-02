@@ -22,3 +22,11 @@ Make sure both packages use compatible MongoDB/BSON versions.
 
 In this project, Mongoose 8 is used to stay compatible with
 `connect-mongodb-session@5`.
+
+Day: 03/10/2026
+
+->  Deleted the favourite collection and model from database and file respectively. 
+->  Rebuit the logic for rendering,adding and deleting Favourites, from a particular user's list.
+    Now user can save their favourite homes indivisually.
+
+  

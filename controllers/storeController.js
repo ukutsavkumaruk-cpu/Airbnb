@@ -1,4 +1,4 @@
-const favClass  = require("../model/favourites");
+const User = require('../model/user')
 const homeClass = require("../model/home");
 
 
@@ -34,46 +34,38 @@ exports.getBookings = (req,res,next) =>{
    })
   }
 
-exports.getFavourites = (req,res,next) =>{
-   favClass.find().then( favs =>{
-   favs = favs.map(favs => favs.houseId.toString())
-   homeClass.find().then((addedHomes)=>{
-      const favHomeDetail = addedHomes.filter((home)=>favs.includes(home._id.toString()))
-      res.render('store/favourite-list',{favHomeDetail:favHomeDetail,pageTitle:'favourites',isLoggedIn:req.isLoggedIn,
-     user: req.session.user})})
-   .catch(err =>{console.log("Error while fetching homes.",err)})})
+exports.getFavourites = async (req,res,next) =>{
+   const userId = req.session.user._id;
+   const user = await User.findById(userId).populate('favourites');
+   console.log("This is userId: ",userId)
+   console.log("And this is user: ",user)
+   res.render('store/favourite-list',{favHomeDetail:user.favourites,pageTitle:'favourites',isLoggedIn:req.isLoggedIn,
+     user: req.session.user})
   }
 
 
-exports.postAddToFavourite = (req,res,next) =>{
+exports.postAddToFavourite = async (req,res,next) =>{
     const favId = req.body.id;
-      const newFav = new favClass({
-         houseId:favId
-      })
-      newFav.save()
-    .then(result =>{console.log("Fav Added..",result)
-    })
-    .catch(err =>{console.log("Error occur while adding fav",err)})
-    .finally(()=>res.redirect('/store/favourite-list'))
+    const userId = req.session.user._id;
+    const user = await User.findById(userId)
+    if(!user.favourites.includes(favId)){
+      user.favourites.push(favId);
+      await user.save()
+    }
+    res.redirect('/store/favourite-list')
    }
     
 
 
 
   
-exports.postDeleteFavourite = (req,res,next) =>{
+exports.postDeleteFavourite = async (req,res,next) =>{
    const favId = req.body.id;
-   console.log(favId)
-    favClass.findOneAndDelete({houseId:favId})
-    .then(res=>{
-      console.log('Successfully deleted',res);
-    })
-    .catch(err=>{
-      console.log("Error occurs while deleting",err)
-    })
-    .finally(() => {
-  res.redirect('/store/favourite-list');
-})
+   const userId = req.session.user._id;
+   const user = await User.findById(userId)
+   user.favourites =  user.favourites.filter(fav=> fav != favId)
+   await user.save()
+   res.redirect('/store/favourite-list')
   }
   
    

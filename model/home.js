@@ -1,5 +1,5 @@
 const { ObjectId } = require("mongodb");
-const { favClass } = require("../model/favourites");
+
 const mongoose = require("mongoose");
 
 //findByID deleteData find save
