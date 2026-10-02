@@ -27,12 +27,21 @@
           </a>
         </li>
         <% if(isLoggedIn) {%>
+          <% if (user && user.userType === "host") { %>
             <li>
               <a class="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-lg  transition duration-200"
                 href="/host/add-Home?editing=false">
                 Add Home
               </a>
             </li>
+            <li>
+              <a class="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-lg  transition duration-200"
+                href="/host/host-home-list">
+                Host Homes
+              </a>
+            </li>
+            <%}%>
+            <%if(user && user.userType === "guest") {%>
 
             <li>
               <a class="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-lg  transition duration-200"
@@ -47,12 +56,8 @@
                 Favourites
               </a>
             </li>
-            <li>
-              <a class="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-lg  transition duration-200"
-                href="/host/host-home-list">
-                Host Homes
-              </a>
-            </li>
+            <%}%>
+            
         <%}%>
         <% if(!isLoggedIn){%> 
         <li>

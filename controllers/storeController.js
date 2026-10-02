@@ -4,9 +4,11 @@ const homeClass = require("../model/home");
 
 exports.getHome = (req,res,next) =>{
    homeClass.find().then((addedHomes)=>{
-      console.log(addedHomes)
+      console.log("HOME SESSION ID:", req.sessionID);
+      console.log("HOME SESSION:", req.session);
       res.render('store/home-list',{addedHomes:addedHomes,
-         pageTitle:'home',isLoggedIn:req.isLoggedIn}
+         pageTitle:'home',isLoggedIn:req.isLoggedIn,
+     user: req.session.user}
       )})
    .catch(err =>{
   console.log("Error while fetching DB :",err)
@@ -14,7 +16,8 @@ exports.getHome = (req,res,next) =>{
    }
 
 exports.getBookings = (req,res,next) =>{
-  homeClass.find().then((addedHomes)=>{res.render('store/bookings',{addedHomes:addedHomes,pageTitle:'bookings',isLoggedIn:req.isLoggedIn})});
+  homeClass.find().then((addedHomes)=>{res.render('store/bookings',{addedHomes:addedHomes,pageTitle:'bookings',isLoggedIn:req.isLoggedIn,
+     user: req.session.user})});
   }
 
   exports.getHomeDetail = (req,res,next) =>{
@@ -24,7 +27,8 @@ exports.getBookings = (req,res,next) =>{
       if(!home){res.redirect('/')
    console.log('home not found')}
       else{
-         res.render('store/home-detail',{pageTitle:'home-detail',home:home,isLoggedIn:req.isLoggedIn})
+         res.render('store/home-detail',{pageTitle:'home-detail',home:home,isLoggedIn:req.isLoggedIn,
+     user: req.session.user})
       }
       
    })
@@ -35,7 +39,8 @@ exports.getFavourites = (req,res,next) =>{
    favs = favs.map(favs => favs.houseId.toString())
    homeClass.find().then((addedHomes)=>{
       const favHomeDetail = addedHomes.filter((home)=>favs.includes(home._id.toString()))
-      res.render('store/favourite-list',{favHomeDetail:favHomeDetail,pageTitle:'favourites',isLoggedIn:req.isLoggedIn})})
+      res.render('store/favourite-list',{favHomeDetail:favHomeDetail,pageTitle:'favourites',isLoggedIn:req.isLoggedIn,
+     user: req.session.user})})
    .catch(err =>{console.log("Error while fetching homes.",err)})})
   }
 

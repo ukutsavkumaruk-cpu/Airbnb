@@ -3,7 +3,8 @@ const  homeClass = require("../model/home");
 
 exports.getAddHome = (req, res, next) => {
   const editing = req.query.editing === 'true';
-  res.render('host/edit-Home', { pageTitle: 'newHome', editing: editing,isLoggedIn:req.isLoggedIn })
+  res.render('host/edit-Home', { pageTitle: 'newHome', editing: editing,isLoggedIn:req.isLoggedIn,
+     user: req.session.user })
 }
 exports.getEditHome = (req, res, next) => {
   const homeId = req.params.homeId;
@@ -15,7 +16,8 @@ exports.getEditHome = (req, res, next) => {
     }
     else {
       console.log(homeId, editing)
-      res.render('host/edit-Home', { pageTitle: 'hostHomes', editing: editing , home:home,isLoggedIn:req.isLoggedIn})
+      res.render('host/edit-Home', { pageTitle: 'hostHomes', editing: editing , home:home,isLoggedIn:req.isLoggedIn,
+     user: req.session.user})
     }
   })
 }
@@ -27,7 +29,8 @@ exports.getDeleted = (req,res,next) =>{
   .then(()=>{
      homeClass.find()
     .then((homes)=>{
-      res.render('host/host-home-list',{addedHomes:homes,pageTitle:'host-home',isLoggedIn:req.isLoggedIn})
+      res.render('host/host-home-list',{addedHomes:homes,pageTitle:'host-home',isLoggedIn:req.isLoggedIn,
+     user: req.session.user})
     })
     .catch((err)=>{
       console.log("Error occurs after deletion: ",err)
@@ -55,7 +58,8 @@ exports.postEditHome = (req, res, next) => {
   homes.Img= image;
   homes.save().then((result)=>{
     console.log("Successfully edited home.",result)
-    res.render('host/home-add-Success', { pageTitle: 'Success' ,isLoggedIn:req.isLoggedIn})
+    res.render('host/home-add-Success', { pageTitle: 'Success' ,isLoggedIn:req.isLoggedIn,
+     user: req.session.user})
   }).catch(err =>{console.log("Error while updating",err)})
   }).catch(err =>{console.log("Id for editing doesnot exist",err)})
 }
@@ -70,7 +74,8 @@ exports.postAddHome = (req, res, next) => {
   Img: image})
   newHome.save().then((result)=>{
     console.log("Home added successfully: ",result)
-    res.render('host/home-add-Success', { pageTitle: 'Success',isLoggedIn:req.isLoggedIn })
+    res.render('host/home-add-Success', { pageTitle: 'Success',isLoggedIn:req.isLoggedIn,
+     user: req.session.user })
   }).catch((err)=>{
     console.log("Error occurs while home addition: ", err)
   })
@@ -78,5 +83,6 @@ exports.postAddHome = (req, res, next) => {
 }
 
 exports.getHostHomeList = (req, res, next) => {
-  homeClass.find().then((addedHomes)=>{ res.render('host/host-home-list', { addedHomes: addedHomes, pageTitle: 'host-home-list',isLoggedIn:req.isLoggedIn }) });
+  homeClass.find().then((addedHomes)=>{ res.render('host/host-home-list', { addedHomes: addedHomes, pageTitle: 'host-home-list',isLoggedIn:req.isLoggedIn,
+     user: req.session.user }) });
 }
