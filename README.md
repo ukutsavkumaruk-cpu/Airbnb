@@ -1,7 +1,7 @@
 # Airbbnb
 This Airbnb project is mainly backend focused.
 
-02/10/2026
+Day: 02/10/2026
 ## Troubleshooting
 
 ### BSON Version Error
