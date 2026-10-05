@@ -42,10 +42,6 @@ exports.getDeleted = (req,res,next) =>{
   })
   }
 
-
-
-
-
 exports.postEditHome = (req, res, next) => {
   const homeId = req.params.homeId;
   const {home,email, location, image, price, phone } = req.body;
@@ -65,17 +61,20 @@ exports.postEditHome = (req, res, next) => {
 }
 
 exports.postAddHome = (req, res, next) => {
-  const { home, email, location, image, price, phone } = req.body;
-  const newHome = new homeClass({ Name: home,
+  const { home, email, location, price, phone } = req.body;
+  const newHome = new homeClass({ 
+  Name: home,
   Email: email,
   Location: location,
   Price: price,
   Phone: phone,
-  Img: image})
+  Img: req.file.path})
+  console.log("BODY",req.body)
   newHome.save().then((result)=>{
     console.log("Home added successfully: ",result)
     res.render('host/home-add-Success', { pageTitle: 'Success',isLoggedIn:req.isLoggedIn,
      user: req.session.user })
+     console.log("FILE",req.file)
   }).catch((err)=>{
     console.log("Error occurs while home addition: ", err)
   })

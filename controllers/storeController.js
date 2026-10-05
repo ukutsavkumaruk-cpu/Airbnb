@@ -4,8 +4,7 @@ const homeClass = require("../model/home");
 
 exports.getHome = (req,res,next) =>{
    homeClass.find().then((addedHomes)=>{
-      console.log("HOME SESSION ID:", req.sessionID);
-      console.log("HOME SESSION:", req.session);
+     
       res.render('store/home-list',{addedHomes:addedHomes,
          pageTitle:'home',isLoggedIn:req.isLoggedIn,
      user: req.session.user}

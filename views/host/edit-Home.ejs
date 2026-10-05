@@ -11,7 +11,7 @@
 
         </h1>
 
-        <form action="/host/<%= editing? 'edit-Home/'+home._id : 'add-Home' %>" method="POST" class="space-y-5">
+        <form action="/host/<%= editing? 'edit-Home/'+home._id : 'add-Home' %>" method="POST" enctype="multipart/form-data" class="space-y-5">
 
           <!-- Home Name -->
           <div>
@@ -25,13 +25,17 @@
 
 
           <!-- Image URL -->
-          <div>
-            <label for="image" class="block text-sm font-medium text-gray-700 mb-2">
-              Home Image URL
-            </label>
+           <!-- <div class="border-2 border-pink-400 rounded-2xl p-2 h-3 w-3">
+              <input type="file" id="image" class="hidden">
 
-            <input id="image" type="url" value="<%= editing ? home.Img : '' %>" placeholder="https://example.com/home.jpg" name="image" required
-              class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400">
+              <label for="image"
+                  class="inline-block cursor-pointer bg-pink-500 text-white px-4 py-2 rounded">
+                  Choose File
+              </label>
+          </div> -->
+          <div>
+            <input id="image" type="file" accept="image/jpeg,image/png,image/jpg" value="<%= editing ? home.Img : '' %>"  name="image" required
+              class=" w-fit border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm text-gray-500">
           </div>
 
 
