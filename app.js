@@ -24,7 +24,7 @@ function randomString(length = 16) {
     .slice(0, length);
 }
 const fileFilter = (req,file , cb) =>{
-  if(['image/jpeg','image/png','image/jpg'].includes(file.mimetype)){
+  if(['image/jpeg','image/png','image/jpg','application/pdf'].includes(file.mimetype)){
     cb(null,true);
   } else{
       cb(null,false)
@@ -50,11 +50,16 @@ const store = new MongoDBStore({
 app.use(express.urlencoded())
 app.use(express.static(path.join(rootDir,'public')))
 app.use('/uploads', express.static(path.join(rootDir, 'uploads')));
+
+
 const multerOption ={
   storage,fileFilter,
 }
 
-app.use(multer({storage,fileFilter}).single('image'));
+app.use(multer({storage,fileFilter}).fields([
+    { name: 'homeRules', maxCount: 1 },
+    { name: 'image', maxCount: 5 }
+  ]));
 
 app.use(session({
     secret: 'Airbnb ka auth',

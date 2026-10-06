@@ -51,7 +51,9 @@ exports.postEditHome = (req, res, next) => {
   homes.Location= location;
   homes.Price= price;
   homes.Phone= phone;
-  homes.Img= image;
+  if(req.file){
+    homes.Img= image;
+  }
   homes.save().then((result)=>{
     console.log("Successfully edited home.",result)
     res.render('host/home-add-Success', { pageTitle: 'Success' ,isLoggedIn:req.isLoggedIn,
@@ -68,13 +70,17 @@ exports.postAddHome = (req, res, next) => {
   Location: location,
   Price: price,
   Phone: phone,
-  Img: req.file.path})
-  console.log("BODY",req.body)
-  newHome.save().then((result)=>{
+  Img: req.files.image[0].filename,
+  homeRules: req.files.homeRules[0].filename
+  })
+  console.log("NEW HOME:", newHome);
+  console.log("HOME RULE:", req.files.homeRules[0].filename);
+
+  newHome.save().
+  then((result)=>{
     console.log("Home added successfully: ",result)
     res.render('host/home-add-Success', { pageTitle: 'Success',isLoggedIn:req.isLoggedIn,
      user: req.session.user })
-     console.log("FILE",req.file)
   }).catch((err)=>{
     console.log("Error occurs while home addition: ", err)
   })

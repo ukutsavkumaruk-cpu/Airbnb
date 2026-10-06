@@ -1,44 +1,96 @@
- <% addedHomes.forEach(home => { %>
-  <div class="w-full  max-w-sm bg-white rounded-xl shadow-md overflow-hidden mb-3 block mr-4 ml-4">
+<% addedHomes.forEach(home => { %>
 
-  <!-- Home Image -->
-  <img
-    src="<%= home.Img %>"
-    alt="Home"
-    class="w-full h-48 object-cover"
-  >
+  <div class="w-full max-w-sm bg-white rounded-2xl shadow-sm hover:shadow-xl
+              border border-gray-100 overflow-hidden mb-6 mx-3
+              transition-all duration-300">
 
-  <div class="p-5">
+    <!-- Home Image -->
+    <div class="relative">
+      <img
+        src="<%= home.Img %>"
+        alt="Home"
+        class="w-full h-52 object-cover"
+      />
 
-    <!-- Home Name -->
-    <h2 class="text-xl font-bold text-gray-800">
-      <%= home.Name %>
-    </h2>
-
-    <!-- Location -->
-    <p class="text-gray-500 mt-2">
-      📍 <%= home.Location %>
-    </p>
-
-    <!-- Price -->
-    <p class="text-lg font-semibold text-pink-600 mt-3">
-      ₹<%= home.Price %>
-      <span class="text-sm text-gray-500 font-normal">/ night</span>
-    </p>
-
-    <!-- Contact -->
-    <div class="mt-4 pt-4 border-t border-gray-200">
-      <p class="text-sm text-gray-600">
-        📧 <%= home.Email %>
-      </p>
-
-      <p class="text-sm text-gray-600 mt-1">
-        📞 <%= home.Phone %>
-      </p>
+      <!-- Price Badge -->
+      <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm
+                  px-3 py-1.5 rounded-full shadow-sm">
+        <span class="text-sm font-bold text-gray-800">
+          ₹<%= home.Price %>
+        </span>
+        <span class="text-xs text-gray-500"> / night</span>
+      </div>
     </div>
-    <button class="bg-green-300 p-1 rounded-xl">Book</button>
-    <a href="/store/home-detail/<%= home._id %>" class="bg-blue-300 p-1 rounded-xl">Details</a>
-    <%- include('./favourites',{home:home}) %>
 
+    <!-- Content -->
+    <div class="p-5">
+
+      <!-- Home Name -->
+      <h2 class="text-xl font-bold text-gray-900 truncate">
+        <%= home.Name %>
+      </h2>
+
+      <!-- Location -->
+      <p class="flex items-center gap-1.5 text-sm text-gray-500 mt-2">
+        <span>📍</span>
+        <span class="truncate"><%= home.Location %></span>
+      </p>
+
+      <!-- House Rules -->
+      <a
+  href="/rules/<%= home._id %>"
+  class="inline-flex items-center gap-1.5 text-sm font-medium
+         text-pink-600 hover:text-pink-700 transition-colors duration-200"
+>
+  House Rules
+  <span class="text-base">→</span>
+</a>
+
+      <!-- Contact Information -->
+      <div class="mt-4 pt-4 border-t border-gray-100 space-y-2">
+
+        <p class="flex items-center gap-2 text-sm text-gray-500 truncate">
+          <span class="flex-shrink-0">📧</span>
+          <span class="truncate"><%= home.Email %></span>
+        </p>
+
+        <p class="flex items-center gap-2 text-sm text-gray-500">
+          <span>📞</span>
+          <span><%= home.Phone %></span>
+        </p>
+
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2 mt-5">
+
+        <button
+          class="flex-1 rounded-lg bg-green-500 px-4 py-2.5
+                 text-sm font-semibold text-white shadow-sm
+                 hover:bg-green-600 active:scale-[0.98]
+                 transition-all duration-200"
+        >
+          Book
+        </button>
+
+        <a
+          href="/store/home-detail/<%= home._id %>"
+          class="flex-1 text-center rounded-lg border border-gray-200
+                 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700
+                 hover:bg-gray-50 hover:border-gray-300
+                 active:scale-[0.98] transition-all duration-200"
+        >
+          Details
+        </a>
+
+      </div>
+
+      <!-- Favourite -->
+      <div class="mt-3">
+        <%- include('./favourites',{home:home}) %>
+      </div>
+
+    </div>
   </div>
-</div><% }) %>
+
+<% }) %>

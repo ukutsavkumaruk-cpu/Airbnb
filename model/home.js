@@ -9,7 +9,8 @@ const homeSchema = new mongoose.Schema({
   Location:{type:String,required:true},
   Price:{type:String,required:true},
   Phone:{type:String,required:true},
-  Img: String
+  Img: String,
+  homeRules: String,
 
 })
 module.exports = mongoose.model('home',homeSchema)

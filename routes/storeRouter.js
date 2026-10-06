@@ -1,11 +1,12 @@
 const express = require('express')
-const { getHome,getBookings,getFavourites,getHomeDetail,postAddToFavourite,postDeleteFavourite} = require('../controllers/storeController');
+const { getHome,getBookings,getFavourites,getRules,getHomeDetail,postAddToFavourite,postDeleteFavourite} = require('../controllers/storeController');
 
 
 
 const storeRouter = express.Router();
 
 storeRouter.get("/",getHome)
+storeRouter.get("/rules",getRules)
 storeRouter.get("/store/bookings",getBookings)
 storeRouter.get("/store/favourite-list",getFavourites)
 storeRouter.get("/store/home-detail/:homeID",getHomeDetail)

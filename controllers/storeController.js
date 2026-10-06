@@ -51,10 +51,19 @@ exports.postAddToFavourite = async (req,res,next) =>{
       user.favourites.push(favId);
       await user.save()
     }
-    res.redirect('/store/favourite-list')
+    res.redirect('/')
    }
     
+exports.getRules = (req, res, next) =>{
+   console.log("Ye getRules wale routte ka hai: ",req.body)
+   if(isLoggedIn){
 
+      // res.render('rules')
+   }
+   else{
+      // res.redirect()
+   }
+}
 
 
   

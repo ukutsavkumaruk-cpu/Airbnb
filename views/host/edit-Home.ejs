@@ -22,18 +22,11 @@
             <input id="home" type="text" placeholder="Enter Home Name" value="<%= editing ? home.Name : '' %>" name="home" required
               class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400">
           </div>
-
-
-          <!-- Image URL -->
-           <!-- <div class="border-2 border-pink-400 rounded-2xl p-2 h-3 w-3">
-              <input type="file" id="image" class="hidden">
-
-              <label for="image"
-                  class="inline-block cursor-pointer bg-pink-500 text-white px-4 py-2 rounded">
-                  Choose File
-              </label>
-          </div> -->
+          
+          <!-- Image -->
           <div>
+
+            <p class="mb-2">Add your home's beautiful image.</p>
             <input id="image" type="file" accept="image/jpeg,image/png,image/jpg" value="<%= editing ? home.Img : '' %>"  name="image" required
               class=" w-fit border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm text-gray-500">
           </div>
@@ -84,6 +77,13 @@
 
             <input id="phone" type="tel" value="<%= editing ? home.Phone : '' %>" placeholder="Enter Phone Number" name="phone" required
               class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400">
+          </div>
+
+          <!-- Home Rules pdf -->
+          <div>
+            <p class="mb-2">Add your home rules pdf file.</p>
+            <input id="homeRules" type="file" accept=".pdf,application/pdf" value="<%= editing ? home.homeRules : '' %>"  name="homeRules" required
+              class=" w-fit border  border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm text-gray-500">
           </div>
 
 
