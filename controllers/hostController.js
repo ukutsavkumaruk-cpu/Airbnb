@@ -1,4 +1,6 @@
 const  homeClass = require("../model/home");
+const fs = require('fs');
+const path = require("../util/path");
 
 
 exports.getAddHome = (req, res, next) => {
@@ -44,7 +46,7 @@ exports.getDeleted = (req,res,next) =>{
 
 exports.postEditHome = (req, res, next) => {
   const homeId = req.params.homeId;
-  const {home,email, location, image, price, phone } = req.body;
+  const {home,email, location, image, price, phone, homeRules } = req.body;
   homeClass.findById(homeId).then((homes)=>{
   homes.Name = home;
   homes.Email= email;
@@ -52,7 +54,16 @@ exports.postEditHome = (req, res, next) => {
   homes.Price= price;
   homes.Phone= phone;
   if(req.file){
+    if(image){
+      const imgPath = path.join(rootDir,'uploads',image);
+      fs.unlink(imgPath);
+    }
     homes.Img= image;
+    if(homeRules){
+      const homeRulePath = path.join(rootDir,'uploads',homeRules);
+      fs.unlink(homeRulePath);
+    }
+    homes.homeRules= homeRules;
   }
   homes.save().then((result)=>{
     console.log("Successfully edited home.",result)

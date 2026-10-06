@@ -6,7 +6,7 @@ const { getHome,getBookings,getFavourites,getRules,getHomeDetail,postAddToFavour
 const storeRouter = express.Router();
 
 storeRouter.get("/",getHome)
-storeRouter.get("/rules",getRules)
+storeRouter.get("/rules/:fileName",getRules)
 storeRouter.get("/store/bookings",getBookings)
 storeRouter.get("/store/favourite-list",getFavourites)
 storeRouter.get("/store/home-detail/:homeID",getHomeDetail)

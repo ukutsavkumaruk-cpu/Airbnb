@@ -1,5 +1,7 @@
 const User = require('../model/user')
 const homeClass = require("../model/home");
+const path = require('path')
+const rootDir = require('../util/path');
 
 
 exports.getHome = (req,res,next) =>{
@@ -55,13 +57,13 @@ exports.postAddToFavourite = async (req,res,next) =>{
    }
     
 exports.getRules = (req, res, next) =>{
-   console.log("Ye getRules wale routte ka hai: ",req.body)
+   const fileName = req.params.fileName;
+   const isLoggedIn = req.isLoggedIn;
    if(isLoggedIn){
-
-      // res.render('rules')
+      res.sendFile(path.join(rootDir, 'uploads', fileName));
    }
    else{
-      // res.redirect()
+      res.redirect('/login')
    }
 }
 

@@ -49,7 +49,8 @@ const store = new MongoDBStore({
 
 app.use(express.urlencoded())
 app.use(express.static(path.join(rootDir,'public')))
-app.use('/uploads', express.static(path.join(rootDir, 'uploads')));
+app.use('/', express.static(path.join(rootDir, 'uploads')));
+// app.use('/rules', express.static(path.join(rootDir, 'uploads')));
 
 
 const multerOption ={
