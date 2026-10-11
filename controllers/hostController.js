@@ -1,6 +1,6 @@
 const  homeClass = require("../model/home");
 const fs = require('fs');
-const path = require("../util/path");
+const path = require('path')
 const rootDir = require('../util/path');
 
 
@@ -45,70 +45,79 @@ exports.getDeleted = (req,res,next) =>{
   })
   }
 
-exports.postEditHome = (req, res, next) => {
-  console.log("1. Request received");
 
-  const homeId = req.params.homeId;
-  const { home, email, location, price, phone } = req.body;
+exports.postEditHome = async (req, res, next) => {
+  try {
+    const homeId = req.params.homeId;
+    const { home, email, location, price, phone } = req.body;
 
-  console.log("2. Home ID:", homeId);
-  console.log("3. Files:", req.files);
+    console.log("Received files:", req.files);
 
-  homeClass.findById(homeId)
-    .then((homes) => {
-      console.log("4. Home found:", !!homes);
+    const homes = await homeClass.findById(homeId);
 
-      if (!homes) {
-        return res.status(404).send("Home not found");
+    if (!homes) {
+      return res.status(404).send("Home not found");
+    }
+
+    homes.Name = home;
+    homes.Email = email;
+    homes.Location = location;
+    homes.Price = price;
+    homes.Phone = phone;
+
+    const oldImage = homes.Img;
+    const oldRules = homes.homeRules;
+
+    if (req.files?.image?.[0]) {
+      homes.Img = req.files.image[0].filename;
+    }
+
+    if (req.files?.homeRules?.[0]) {
+      homes.homeRules = req.files.homeRules[0].filename;
+    }
+
+    await homes.save();
+
+    console.log("Database updated successfully");
+
+    if (req.files?.image?.[0] && oldImage) {
+      const imgPath = path.join(rootDir, "uploads", oldImage);
+
+      try {
+        await fs.promises.unlink(imgPath);
+        console.log("Old image deleted successfully");
+      } catch (err) {
+        console.log("Old image deletion error:", err.message);
       }
+    }
 
-      homes.Name = home;
-      homes.Email = email;
-      homes.Location = location;
-      homes.Price = price;
-      homes.Phone = phone;
+    if (req.files?.homeRules?.[0] && oldRules) {
+      const rulePath = path.join(rootDir, "uploads", oldRules);
 
-      if (req.files?.image?.[0]) {
-        console.log("5. Updating image");
-        homes.Img = req.files.image[0].filename;
+      try {
+        await fs.promises.unlink(rulePath);
+        console.log("Old PDF deleted successfully");
+      } catch (err) {
+        console.log("Old PDF deletion error:", err.message);
       }
+    }
 
-      if (req.files?.homeRules?.[0]) {
-        console.log("6. Updating PDF");
-        homes.homeRules = req.files.homeRules[0].filename;
-      }
-
-      console.log("7. Saving home");
-
-      return homes.save()
-  .then((result) => {
-    console.log("8. Save successful:", result._id);
-    return result;
-  })
-  .catch((err) => {
-    console.error("SAVE FAILED:", err);
-    throw err;
-  });
-    })
-    .then((result) => {
-      if (!result) return;
-
-      console.log("8. Database save successful");
-
-      return res.render("host/home-add-Success", {
-        pageTitle: "Success",
-        isLoggedIn: req.isLoggedIn,
-        user: req.session.user
-      });
-    })
-    .catch((err) => {
-      console.error("EDIT ERROR:", err);
-
-      if (!res.headersSent) {
-        res.status(500).send("Home update failed");
-      }
+    return res.render("host/home-add-Success", {
+      pageTitle: "Success",
+      isLoggedIn: req.isLoggedIn,
+      user: req.session.user
     });
+
+  } catch (err) {
+    console.error("Error while editing home:", err);
+
+    if (!res.headersSent) {
+      return res.status(500).send("Unable to update home");
+    }
+  }
 };
+
+
 
 exports.postAddHome = (req, res, next) => {
   const { home, email, location, price, phone } = req.body;
