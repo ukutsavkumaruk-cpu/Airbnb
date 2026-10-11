@@ -59,7 +59,7 @@ const multerOption ={
 
 app.use(multer({storage,fileFilter}).fields([
     { name: 'homeRules', maxCount: 1 },
-    { name: 'image', maxCount: 5 }
+    { name: 'image', maxCount: 1 }
   ]));
 
 app.use(session({
