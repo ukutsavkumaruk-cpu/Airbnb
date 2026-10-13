@@ -29,4 +29,6 @@ Day: 03/10/2026
 ->  Rebuit the logic for rendering,adding and deleting Favourites, from a particular user's list.
     Now user can save their favourite homes indivisually.
 
-  
+Day: 13/10/26
+
+-> Fixed the imports for proper working of the deletion of the previous user data.
