@@ -8,7 +8,8 @@ const { pageNotFound } = require('./controllers/errors');
 const { default: mongoose } = require('mongoose');
 const { authRouter } = require('./routes/authRouter');
 const session = require('express-session')
-const DB_URL = "mongodb+srv://ukutsavkumaruk_db_user:utsav1311@airbnbv1.3ajox3i.mongodb.net/airbnb"
+require("dotenv").config();
+const DB_URL = process.env.DB_URL;
 const MongoDBStore = require('connect-mongodb-session')(session);
 const multer = require('multer')
 const { randomBytes } = require('crypto');
