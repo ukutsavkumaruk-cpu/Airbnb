@@ -4,85 +4,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/output.css">
-  <title>
-    <%= pageTitle %>
-  </title>
+  <title><%= pageTitle %></title>
 </head>
 
 <body>
-  <header>
-    <div class="w-full h-24 bg-pink-500 flex items-center justify-center ">
-      <h1 class="text-white text-4xl font-bold tracking-wide">
-        Welcome Airbnb 🏠
-      </h1>
-    </div>
-    <div class="bg-pink-500 p-4">
-      <ul class="flex gap-18 ">
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Main navigation">
+      <a class="brand" href="/" aria-label="Staybnb home">
+        <span class="brand-mark" aria-hidden="true">s</span>
+        <span>staybnb</span>
+      </a>
 
-        <li>
-          <a class="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-lg  transition duration-200"
-            href="/">
-            Home
-          </a>
-        </li>
-        <% if(isLoggedIn) {%>
+      <div class="nav-links">
+        <a class="nav-link" href="/">Explore stays</a>
+        <% if(isLoggedIn) { %>
           <% if (user && user.userType === "host") { %>
-            <li>
-              <a class="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-lg  transition duration-200"
-                href="/host/add-Home?editing=false">
-                Add Home
-              </a>
-            </li>
-            <li>
-              <a class="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-lg  transition duration-200"
-                href="/host/host-home-list">
-                Host Homes
-              </a>
-            </li>
-            <%}%>
-            <%if(user && user.userType === "guest") {%>
+            <a class="nav-link" href="/host/add-Home?editing=false">Add a stay</a>
+            <a class="nav-link" href="/host/host-home-list">Your listings</a>
+          <% } %>
+          <% if(user && user.userType === "guest") { %>
+            <a class="nav-link" href="/store/bookings">Bookings</a>
+            <a class="nav-link" href="/store/favourite-list">Favourites</a>
+          <% } %>
+        <% } %>
+      </div>
 
-            <li>
-              <a class="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-lg  transition duration-200"
-                href="/store/bookings">
-                Bookings
-              </a>
-            </li>
-
-            <li>
-              <a class="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-lg  transition duration-200"
-                href="/store/favourite-list">
-                Favourites
-              </a>
-            </li>
-            <%}%>
-            
-        <%}%>
-        <% if(!isLoggedIn){%> 
-        <li>
-          <a class="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-lg  transition duration-200"
-            href="/login">
-            Login
-          </a>
-        </li>
-        <li>
-          <a class="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-lg  transition duration-200"
-            href="/signUp">
-              SignUp
-          </a>
-        </li>
-        <%} else {%>
+      <div class="nav-actions">
+        <% if(!isLoggedIn) { %>
+          <a class="nav-login" href="/login">Log in</a>
+          <a class="nav-signup" href="/signUp">Sign up</a>
+        <% } else { %>
           <form action="/logout" method="post">
-           <li>
-          <a class="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2.5 rounded-lg  transition duration-200"
-          >
-            <button type="submit
-            ">Logout</button>
-          </a>
-        </li>
-        </form>
-        <%}%>
-      </ul>
-    </div>
+            <button class="nav-login" type="submit">Log out</button>
+          </form>
+        <% } %>
+      </div>
+    </nav>
   </header>

@@ -47,6 +47,11 @@ exports.getFavourites = async (req,res,next) =>{
 
 exports.postAddToFavourite = async (req,res,next) =>{
     const favId = req.body.id;
+    const isLoggedIn = req.isLoggedIn;
+    if(!isLoggedIn){
+      res.redirect('/login');
+    }
+    else{
     const userId = req.session.user._id;
     const user = await User.findById(userId)
     if(!user.favourites.includes(favId)){
@@ -54,6 +59,7 @@ exports.postAddToFavourite = async (req,res,next) =>{
       await user.save()
     }
     res.redirect('/')
+    }
    }
     
 exports.getRules = (req, res, next) =>{
