@@ -21,7 +21,7 @@ exports.postLogin = async (req, res, next) => {
       isLoggedIn: false,
       errors: ["User does not exist"],
       oldInput: {
-        email,
+        userName: email,
       },
       user: {},
     });
@@ -33,7 +33,7 @@ exports.postLogin = async (req, res, next) => {
       isLoggedIn: false,
       errors: ["Invalid password"],
       oldInput: {
-        email,
+        userName: email,
       },
       user: {},
     });

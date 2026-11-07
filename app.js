@@ -10,6 +10,7 @@ const { authRouter } = require('./routes/authRouter');
 const session = require('express-session')
 require("dotenv").config();
 const DB_URL = process.env.DB_URL;
+const SESSION_SECRET = process.env.SESSION_SECRET;
 const MongoDBStore = require('connect-mongodb-session')(session);
 const multer = require('multer')
 const { randomBytes } = require('crypto');
@@ -63,11 +64,19 @@ app.use(multer({storage,fileFilter}).fields([
     { name: 'image', maxCount: 1 }
   ]));
 
+app.set('trust proxy', 1);
+
 app.use(session({
-    secret: 'Airbnb ka auth',
+    secret: SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
-    store:store,
+    saveUninitialized: false,
+    store: store,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000
+    }
 }));
 
 app.set("view engine",'ejs')
@@ -94,14 +103,14 @@ app.use(express.static(path.join(rootDir,'public')))
 app.use(pageNotFound)
 
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 
 mongoose.connect(DB_URL).then(()=>{
 console.log("Connection Successful");
-server.listen(PORT,()=>{
-  console.log(`Server is running at http://localhost:${PORT}`)
-})
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port http://localhost:${PORT}`);
+});
 }
 )
 .catch(err =>{
